@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="tl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>For Leya, My Love 💗</title>
+  <meta name="description" content="A little 1st Monthsarry gift for Leya.">
+  <meta name="theme-color" content="#ffc8dc">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💗</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ============ 1. OPENING SCREEN ============ -->
+  <section id="intro" class="screen active">
+    <div class="hearts-layer"></div>
+    <div class="intro-card">
+      <div class="intro-photo">
+        <img src="assets/memories/memory-01.jpg" alt="Leya">
+        <span class="intro-heart">💗</span>
+      </div>
+      <h1>💗 For Leya, My Love 💗</h1>
+      <p>I made a little something for you.</p>
+      <p class="soft">Take care of yourself first, okay?</p>
+      <button id="startBtn" class="btn-main">Start 💗</button>
+      <p class="tiny">🔊 turn on your sound, love</p>
+    </div>
+  </section>
+
+  <!-- ============ 2. MAIN GAME ============ -->
+  <section id="game" class="screen">
+    <!-- Needs bars -->
+    <div class="hud">
+      <div class="need" id="need-eat"><span class="need-icon">🍱</span><div class="bar"><div class="fill"></div></div></div>
+      <div class="need" id="need-study"><span class="need-icon">📚</span><div class="bar"><div class="fill"></div></div></div>
+      <div class="need" id="need-sleep"><span class="need-icon">😴</span><div class="bar"><div class="fill"></div></div></div>
+    </div>
+
+    <div class="scene" id="scene" data-area="kitchen">
+
+      <!-- Kitchen / eating area -->
+      <div class="area area-kitchen active" data-area="kitchen">
+        <div class="wall"><div class="tiles"></div></div>
+        <div class="floor"></div>
+        <div class="window day"><div class="sun"></div><div class="mini-cloud c1"></div><div class="mini-cloud c2"></div><div class="curtain l"></div><div class="curtain r"></div></div>
+        <div class="shelf"><span>🍯</span><span>🧂</span><span>🍵</span></div>
+        <div class="counter"><span class="counter-top">🍳</span><span class="plant">🪴</span></div>
+        <div class="table"><div class="table-top"><span>🍓</span><span>🥛</span></div><div class="table-leg"></div></div>
+      </div>
+
+      <!-- Study area -->
+      <div class="area area-study" data-area="study">
+        <div class="wall"></div>
+        <div class="floor"></div>
+        <div class="window sunset"><div class="sun"></div><div class="curtain l"></div><div class="curtain r"></div></div>
+        <div class="corkboard"><i></i><i></i><i></i><i></i><span>💗</span></div>
+        <div class="clock"><div class="hand h"></div><div class="hand m"></div></div>
+        <div class="desk">
+          <div class="desk-items"><span>🌷</span><span>💻</span><span>📚</span></div>
+          <div class="desk-top"></div><div class="desk-leg l"></div><div class="desk-leg r"></div>
+        </div>
+      </div>
+
+      <!-- Bedroom -->
+      <div class="area area-bedroom" data-area="bedroom">
+        <div class="wall"></div>
+        <div class="floor"></div>
+        <div class="window nightsky"><span class="moon">🌙</span><i class="star s1"></i><i class="star s2"></i><i class="star s3"></i><div class="curtain l"></div><div class="curtain r"></div></div>
+        <div class="string-lights"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="bed">
+          <div class="headboard"><span>💗</span></div>
+          <div class="mattress"></div>
+          <div class="pillow"></div>
+          <!-- Sleeping Leya (only head shows, blanket covers the rest) -->
+          <svg class="sleeper" id="sleeper" viewBox="0 0 200 150" aria-hidden="true">
+            <defs>
+              <linearGradient id="sleepHair" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#2e1b18"/><stop offset=".6" stop-color="#4a2a20"/><stop offset="1" stop-color="#7d4430"/>
+              </linearGradient>
+            </defs>
+            <path d="M34 74 C 24 32 62 10 100 10 C 138 10 176 32 166 74 C 180 96 176 132 156 134 L44 134 C 24 132 20 96 34 74 Z" fill="url(#sleepHair)"/>
+            <ellipse cx="100" cy="78" rx="40" ry="42" fill="#ebb592"/>
+            <ellipse cx="80" cy="96" rx="8" ry="4.5" fill="#f2837a" opacity=".45"/>
+            <ellipse cx="120" cy="96" rx="8" ry="4.5" fill="#f2837a" opacity=".45"/>
+            <path d="M72 84 Q 81 90 90 84 M110 84 Q 119 90 128 84" stroke="#241310" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+            <path d="M96 104 Q 100 107 104 104" stroke="#b04d4a" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+            <path d="M100 26 C 78 24 58 40 58 78 C 58 90 60 100 64 110 C 66 98 69 90 74 84 C 76 62 86 46 100 38 Z" fill="#3a221c"/>
+            <path d="M100 26 C 122 24 142 40 142 78 C 142 90 140 100 136 110 C 134 98 131 90 126 84 C 124 62 114 46 100 38 Z" fill="#3a221c"/>
+            <circle cx="60" cy="96" r="3" fill="#fffaf2"/><circle cx="140" cy="96" r="3" fill="#fffaf2"/>
+          </svg>
+          <div class="blanket"><span class="plush">🧸</span></div>
+        </div>
+        <div class="nightstand"><div class="lampshade"></div><div class="lamp-glow"></div><div class="stand"></div></div>
+        <div class="night" id="night"></div>
+        <div class="zzz-big" id="zzzBig">Zzz...</div>
+      </div>
+
+      <!-- Anime Leya -->
+      <div class="leya-wrap" id="leya" data-state="idle">
+        <div class="bubble" id="bubble"></div>
+        <div class="thought" id="thought"></div>
+
+        <svg class="leya-svg" id="leyaSvg" viewBox="0 0 240 400" role="img" aria-label="Anime Leya">
+          <defs>
+            <linearGradient id="hairGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#2e1b18"/><stop offset=".55" stop-color="#4a2a20"/><stop offset="1" stop-color="#8a4a31"/>
+            </linearGradient>
+            <linearGradient id="hairFront" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#3a221c"/><stop offset="1" stop-color="#5b3324"/>
+            </linearGradient>
+            <radialGradient id="irisGrad" cx=".5" cy=".35" r=".75">
+              <stop offset="0" stop-color="#8a5332"/><stop offset=".6" stop-color="#4a2716"/><stop offset="1" stop-color="#22110a"/>
+            </radialGradient>
+            <linearGradient id="jeansGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#a3c1e6"/><stop offset="1" stop-color="#7d9fcc"/>
+            </linearGradient>
+            <!-- Her favorite turquoise halter top with little yellow flowers -->
+            <pattern id="topFlowers" width="14" height="14" patternUnits="userSpaceOnUse">
+              <rect width="14" height="14" fill="#27b4d6"/>
+              <path d="M0 7 L7 0 L14 7 L7 14 Z" fill="none" stroke="#bff0ff" stroke-width=".6" opacity=".7"/>
+              <g fill="#ffd84a"><circle cx="7" cy="5.4" r="1.6"/><circle cx="7" cy="8.6" r="1.6"/><circle cx="5.4" cy="7" r="1.6"/><circle cx="8.6" cy="7" r="1.6"/></g>
+              <circle cx="7" cy="7" r="1" fill="#fff6b8"/>
+            </pattern>
+          </defs>
+
+          <g class="leya-body">
+            <!-- back hair -->
+            <path class="hair-back" d="M70 96 C 64 52 92 24 120 24 C 148 24 176 52 170 96 C 172 140 184 180 190 222 C 194 252 186 274 172 270 C 176 256 166 250 162 262 C 156 274 144 268 146 256 C 136 262 104 262 94 256 C 96 268 84 274 78 262 C 74 250 64 256 68 270 C 54 274 46 252 50 222 C 56 180 68 140 70 96 Z" fill="url(#hairGrad)"/>
+            <!-- neck + shoulders + arms -->
+            <path d="M110 136 L130 136 L131 162 L109 162 Z" fill="#d9a07c"/>
+            <path d="M82 188 C 84 172 100 165 112 162 L128 162 C 140 165 156 172 158 188 Z" fill="#ebb592"/>
+            <path class="arm-l" d="M84 178 C 74 190 72 222 73 250 C 73 258 84 260 85 252 C 86 228 90 204 96 188 Z" fill="#ebb592"/>
+            <path class="arm-r" d="M156 178 C 166 190 168 222 167 250 C 167 258 156 260 155 252 C 154 228 150 204 144 188 Z" fill="#ebb592"/>
+            <circle cx="79" cy="255" r="7" fill="#ebb592"/>
+            <circle cx="161" cy="255" r="7" fill="#ebb592"/>
+            <!-- jeans + shoes -->
+            <path d="M90 240 L150 240 L156 336 L126 336 L120 284 L114 336 L84 336 Z" fill="url(#jeansGrad)"/>
+            <path d="M90 249 L150 249 M120 249 L120 284" stroke="#6f8fbd" stroke-width="1.4" fill="none"/>
+            <ellipse cx="99" cy="341" rx="17" ry="7" fill="#fff" stroke="#f3b6c8" stroke-width="2"/>
+            <ellipse cx="141" cy="341" rx="17" ry="7" fill="#fff" stroke="#f3b6c8" stroke-width="2"/>
+            <!-- tummy (crop top) -->
+            <rect x="92" y="226" width="56" height="16" fill="#ebb592"/>
+            <!-- high-neck halter top -->
+            <path d="M106 144 L134 144 L138 166 C 146 172 148 180 148 188 L150 232 C 136 236 104 236 90 232 L92 188 C 92 180 94 172 102 166 Z" fill="url(#topFlowers)" stroke="#1d97b8" stroke-width="1.3"/>
+            <!-- infinity necklace -->
+            <path d="M114 160 c0 -3 4 -3 6 0 c2 3 6 3 6 0 c0 -3 -4 -3 -6 0 c-2 3 -6 3 -6 0 z" fill="none" stroke="#e8b84f" stroke-width="1.3"/>
+          </g>
+
+          <g class="leya-head">
+            <!-- ears + pearl earrings -->
+            <ellipse cx="76" cy="102" rx="6" ry="9" fill="#e3a984"/>
+            <ellipse cx="164" cy="102" rx="6" ry="9" fill="#e3a984"/>
+            <circle cx="76" cy="113" r="3.8" fill="#fffaf2" stroke="#e6dccb" stroke-width=".8"/><circle cx="75" cy="112" r="1.1" fill="#fff"/>
+            <circle cx="164" cy="113" r="3.8" fill="#fffaf2" stroke="#e6dccb" stroke-width=".8"/><circle cx="163" cy="112" r="1.1" fill="#fff"/>
+            <!-- face -->
+            <path d="M76 90 C 76 132 98 150 120 150 C 142 150 164 132 164 90 C 164 62 144 46 120 46 C 96 46 76 62 76 90 Z" fill="#ebb592"/>
+            <ellipse class="blush" cx="94" cy="123" rx="9" ry="5" fill="#f2837a" opacity=".42"/>
+            <ellipse class="blush" cx="146" cy="123" rx="9" ry="5" fill="#f2837a" opacity=".42"/>
+
+            <!-- eyebrows -->
+            <g class="brows brows-normal" stroke="#3a2320" stroke-width="2.3" fill="none" stroke-linecap="round">
+              <path d="M90 88 Q 100 83 110 87"/><path d="M130 87 Q 140 83 150 88"/>
+            </g>
+            <g class="brows brows-worried" stroke="#3a2320" stroke-width="2.3" fill="none" stroke-linecap="round">
+              <path d="M90 87 Q 100 86 110 91"/><path d="M130 91 Q 140 86 150 87"/>
+            </g>
+
+            <!-- eyes: open -->
+            <g class="eyes eyes-open">
+              <ellipse cx="100" cy="106" rx="10.5" ry="12" fill="#fff"/>
+              <ellipse class="iris" cx="100" cy="107" rx="8.5" ry="10.5" fill="url(#irisGrad)"/>
+              <circle cx="100" cy="108" r="4" fill="#1a0c07"/>
+              <circle cx="96.5" cy="102.5" r="3.2" fill="#fff"/><circle cx="103" cy="111" r="1.5" fill="#fff"/>
+              <ellipse cx="140" cy="106" rx="10.5" ry="12" fill="#fff"/>
+              <ellipse class="iris" cx="140" cy="107" rx="8.5" ry="10.5" fill="url(#irisGrad)"/>
+              <circle cx="140" cy="108" r="4" fill="#1a0c07"/>
+              <circle cx="136.5" cy="102.5" r="3.2" fill="#fff"/><circle cx="143" cy="111" r="1.5" fill="#fff"/>
+              <path d="M87 100 Q 99 90 112 98 M87 100 L84 96.5 M128 98 Q 141 90 153 100 M153 100 L156 96.5" stroke="#241310" stroke-width="3.4" fill="none" stroke-linecap="round"/>
+            </g>
+            <!-- eyes: happy ^^ -->
+            <g class="eyes eyes-happy" stroke="#241310" stroke-width="3.2" fill="none" stroke-linecap="round">
+              <path d="M90 108 Q 100 97 110 108"/><path d="M130 108 Q 140 97 150 108"/>
+            </g>
+            <!-- eyes: closed -->
+            <g class="eyes eyes-closed" stroke="#241310" stroke-width="3" fill="none" stroke-linecap="round">
+              <path d="M90 105 Q 100 113 110 105"/><path d="M130 105 Q 140 113 150 105"/>
+            </g>
+            <!-- eyes: sleepy (half closed) -->
+            <g class="eyes eyes-sleepy">
+              <ellipse cx="100" cy="109" rx="10" ry="6" fill="#fff"/><ellipse cx="100" cy="110" rx="7.5" ry="5.5" fill="url(#irisGrad)"/>
+              <ellipse cx="140" cy="109" rx="10" ry="6" fill="#fff"/><ellipse cx="140" cy="110" rx="7.5" ry="5.5" fill="url(#irisGrad)"/>
+              <path d="M88 104 Q 100 101 112 104 M128 104 Q 140 101 152 104" stroke="#241310" stroke-width="3.4" fill="none" stroke-linecap="round"/>
+            </g>
+
+            <!-- nose -->
+            <path d="M119 117 Q 121.5 119.5 119 121" stroke="#c98b6a" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+
+            <!-- mouths -->
+            <path class="mouth mouth-smile" d="M111 129 Q 120 139 129 129 Q 120 132 111 129 Z" fill="#c75a5a" stroke="#b04d4a" stroke-width="1.2" stroke-linejoin="round"/>
+            <ellipse class="mouth mouth-open" cx="120" cy="131" rx="4.5" ry="5" fill="#9e3f3f"/>
+            <path class="mouth mouth-worried" d="M112 132 Q 116 128 120 132 Q 124 136 128 132" stroke="#b04d4a" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+            <ellipse class="mouth mouth-yawn" cx="120" cy="132" rx="6" ry="8" fill="#8a3434"/>
+            <path class="mouth mouth-small" d="M115 131 Q 120 134 125 131" stroke="#b04d4a" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+
+            <!-- front hair: middle part + curtain bangs -->
+            <path d="M120 28 C 92 26 66 46 66 96 C 66 114 70 128 75 142 C 77 126 80 114 86 104 C 88 80 102 58 120 44 Z" fill="url(#hairFront)"/>
+            <path d="M120 28 C 148 26 174 46 174 96 C 174 114 170 128 165 142 C 163 126 160 114 154 104 C 152 80 138 58 120 44 Z" fill="url(#hairFront)"/>
+            <!-- long side strands over the shoulders -->
+            <path d="M70 110 C 62 150 64 190 72 216 C 74 202 78 198 80 208 C 82 180 85 150 84 120 Z" fill="url(#hairGrad)"/>
+            <path d="M170 110 C 178 150 176 190 168 216 C 166 202 162 198 160 208 C 158 180 155 150 156 120 Z" fill="url(#hairGrad)"/>
+            <path d="M120 28 L120 44" stroke="#24140f" stroke-width="1.2"/>
+            <path d="M84 60 Q 100 42 116 38 M124 38 Q 142 42 156 60" stroke="#a0664a" stroke-width="3" opacity=".45" fill="none" stroke-linecap="round"/>
+            <path d="M102 56 C 94 72 90 86 88 100 M138 56 C 146 72 150 86 152 100" stroke="#24140f" stroke-width="1" opacity=".45" fill="none"/>
+
+            <!-- little blue flower clip -->
+            <g transform="translate(82 62)">
+              <g fill="#9fd3f5" stroke="#6fb4e0" stroke-width=".7">
+                <circle cx="0" cy="-5" r="4.4"/><circle cx="4.8" cy="-1.5" r="4.4"/><circle cx="3" cy="4" r="4.4"/><circle cx="-3" cy="4" r="4.4"/><circle cx="-4.8" cy="-1.5" r="4.4"/>
+              </g>
+              <circle r="2.8" fill="#ffe066"/>
+            </g>
+
+            <!-- sweat drop (stressed) -->
+            <path class="sweat" d="M160 70 C 155 79 155 86 160 86 C 165 86 165 79 160 70 Z" fill="#a9ddff" stroke="#6bbbe8" stroke-width="1"/>
+          </g>
+        </svg>
+
+        <div class="prop" id="prop"><span class="prop-main"></span><span class="prop-tool"></span></div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions">
+      <button class="action" data-action="eat"><span class="a-icon">🍱</span><span class="a-label">Eat</span></button>
+      <button class="action" data-action="study"><span class="a-icon">📚</span><span class="a-label">Study</span></button>
+      <button class="action" data-action="sleep"><span class="a-icon">😴</span><span class="a-label">Sleep</span></button>
+    </div>
+  </section>
+
+  <!-- ============ 3. DREAM WORLD ============ -->
+  <section id="dream" class="screen">
+    <div class="cloud cl1"></div><div class="cloud cl2"></div><div class="cloud cl3"></div>
+    <div class="hearts-layer"></div>
+
+    <p class="dream-text" id="dreamText"></p>
+
+    <div class="envelope-wrap" id="envelopeWrap">
+      <p>May sulat ako para sayo, love. 💌</p>
+      <button class="envelope" id="envelopeBtn" aria-label="Open the letter"><span>💌</span></button>
+      <p class="tiny">tap mo yung envelope</p>
+    </div>
+
+    <!-- The Monthsarry letter (only shown in the dream) -->
+    <div class="letter" id="letter">
+      <div class="letter-body">
+        <h2>Happy 1st Monthsarry, love! 💗</h2>
+        <p>Ginawa ko 'tong website na 'to para sayo, as my gift. Hindi siya perfect, pero pinaghirapan ko talaga 'to kasi gusto ko may maibigay ako sayo na galing mismo sa akin. Hehehe.</p>
+        <p>Ever since I met you, ramdam ko agad na kakampi kita. Sa mga ups and downs ko, nandyan ka. Kahit nakita mo na yung mga flaws ko, hindi ka umalis. Nandito ka pa rin. And honestly, isa yun sa mga bagay na sobrang pinapasalamatan ko.</p>
+        <p>Iba kasi yung pakikitungo mo sa akin, love. Yung pag-aalaga mo, yung pakikinig mo, yung pag-intindi mo sa akin. Yun talaga yung dahilan kung bakit kita nagustuhan. Hindi ko maexplain nang maayos, basta iba ka. Kaya gusto ko rin na ganun ako sayo. Sa ups and downs mo, nandito lang din ako. Promise yan.</p>
+        <p>Thank you so much kasi tinanggap mo ako kung sino talaga ako. Alam kong minsan loko-loko ako, makulit, tapos minsan masungit pa. Pero kahit ganun, ikaw yung nagpapakalma sa akin. Ewan ko paano mo nagagawa yun, pero every time, effective. Hehehe.</p>
+        <p>Sorry din kung minsan sobrang tigas ng ulo ko, lalo na pagdating sa pag-inom. Hehehe. Alam ko minsan napapaisip ka, pero alam ko rin na may tiwala ka sa akin pagdating doon. And I really appreciate that, love. Hindi ko sasayangin yung tiwala mo.</p>
+        <p>Also, kahit may flaws ka, para sa akin you're still beautiful as always. Wala namang perfect, pero sapat na sapat ka na para sa akin. Hindi nababawasan yung pagmamahal ko sayo dahil lang sa mga imperfections mo. Mas lalo pa nga kitang minamahal.</p>
+        <p>Kaya sana alagaan mo rin yung sarili mo ha. Kumain ka on time, wag kang magpapagutom. Wag ka masyadong ma-stress sa pag-aaral, kaya mo yan, pero magpahinga ka rin pag pagod ka na. Tsaka matulog ka nang maayos, wag puro puyat. Hehehe. Gusto ko lang lagi kang okay.</p>
+        <p>Whatever happens to us, I still love you. Nandito lang ako lagi para sayo. Kakampi mo ako sa lahat, love. Sa lahat. ❤️</p>
+        <p class="sign">I love youuuu. 💗<br>— your kakampi</p>
+      </div>
+      <p class="tiny letter-hint" id="letterHint">(tap para makita lahat)</p>
+      <button class="btn-main hidden-btn" id="toMemories">Next 📸</button>
+    </div>
+
+    <!-- Memory montage -->
+    <div class="montage" id="montage">
+      <div class="montage-bg" id="montageBg"></div>
+      <div class="montage-frame" id="montageFrame"></div>
+      <p class="caption" id="caption"></p>
+      <div class="progress" id="progress"></div>
+      <div class="montage-controls">
+        <button id="mPrev" aria-label="Previous">◀</button>
+        <button id="mPause" aria-label="Pause">⏸</button>
+        <button id="mNext" aria-label="Next">▶</button>
+      </div>
+      <button class="sound-chip" id="clipSound">🔇 Tap for sound</button>
+    </div>
+
+    <!-- Final dream message -->
+    <div class="finale" id="finale">
+      <p>Happy 1st Monthsarry, Love. ❤️</p>
+      <p>Thank you for being you.</p>
+      <p>Thank you for staying.</p>
+      <p>Thank you for accepting me.</p>
+      <p>Whatever happens,</p>
+      <p class="big">kakampi mo ako sa lahat.</p>
+      <p>I love youuuu. ❤️</p>
+      <button class="btn-main hidden-btn" id="toFinal">💗</button>
+    </div>
+  </section>
+
+  <!-- ============ 4. FINAL SCREEN ============ -->
+  <section id="final" class="screen">
+    <div class="hearts-layer"></div>
+    <div class="final-card">
+      <h2>For Leya, my Love. ❤️</h2>
+      <p>Happy 1st Monthsarry.</p>
+      <p>I hope you liked my little gift.</p>
+      <p>I love youuuu.</p>
+      <p class="soft">Always remember:</p>
+      <p class="big">Kakampi mo ako sa lahat. ❤️</p>
+      <button id="againBtn" class="btn-main">Play Again 💗</button>
+    </div>
+  </section>
+
+  <!-- Music control -->
+  <div class="music" id="music">
+    <button class="music-btn" id="musicBtn" aria-label="Music">🎵</button>
+    <div class="music-panel" id="musicPanel">
+      <button id="musicPlay" class="music-play">▶ Play</button>
+      <input type="range" id="musicVol" min="0" max="1" step="0.05" value="0.7" aria-label="Volume">
+      <p class="music-status" id="musicStatus">Na Para Bang 🎶</p>
+    </div>
+  </div>
+
+  <div id="fx" aria-hidden="true"></div>
+  <div id="curtain"></div>
+  <div id="toast"></div>
+  <audio id="bgm" preload="metadata" loop></audio>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
