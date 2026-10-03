@@ -6,8 +6,13 @@
 
 // ---------- Easy-to-edit settings ----------
 
-// Put a legally obtained copy of "Na Para Bang" here. If it's missing the site still works.
-const MUSIC_SRC = 'assets/audio/love-song.mp3';
+// Background song: "Na Para Bang" by Mariah Deborah.
+// It streams for free from the official YouTube upload (embedding is allowed by the channel).
+const YT_VIDEO_ID = 'mGsOHanQwxk';      // "Na Para Bang" (Mariah Deborah - Topic, official audio)
+const YT_FALLBACK_ID = 'CqBQiz6DfBE';   // Official Lyric Visualizer, used if the first one fails
+// Optional: if you have your own legal mp3, put it in assets/audio/ and set this,
+// e.g. 'assets/audio/love-song.mp3'. A local file is used instead of YouTube.
+const MUSIC_SRC = '';
 
 // Optional: set this to a transparent PNG/WebP (e.g. 'assets/character/leya.png')
 // to replace the drawn anime Leya with your own illustration.
@@ -104,8 +109,9 @@ function run(fn) {
   return fn().catch((e) => { if (e !== CANCELLED) console.error(e); });
 }
 
-// Keep a correct "vh" on mobile browsers with moving toolbars
-function setVh() { document.documentElement.style.setProperty('--vh', `${window.innerHeight / 100}px`); }
+// "--vh" = 1% of the portrait frame's height (also handles mobile toolbars)
+const app = $('#app');
+function setVh() { document.documentElement.style.setProperty('--vh', `${app.clientHeight / 100}px`); }
 setVh();
 window.addEventListener('resize', setVh);
 
@@ -159,9 +165,11 @@ function startAmbient(screenId) {
   ambientTimer = setInterval(spawn, screenId === 'dream' ? 650 : 900);
 }
 
+// Position of an element inside the portrait frame (the #fx layer lives in the frame)
 function centerOf(el, yRatio = 0.5) {
   const r = el.getBoundingClientRect();
-  return { x: r.left + r.width / 2, y: r.top + r.height * yRatio };
+  const a = app.getBoundingClientRect();
+  return { x: r.left - a.left + r.width / 2, y: r.top - a.top + r.height * yRatio };
 }
 
 function burstHearts(el, count = 12, yRatio = 0.4) {
@@ -628,90 +636,183 @@ $('#toFinal').addEventListener('click', () => {
 });
 
 // ---------- Music ----------
+// Uses a local mp3 if MUSIC_SRC is set, otherwise streams the song with YouTube's embedded player.
 const music = {
   el: $('#bgm'),
+  mode: MUSIC_SRC ? 'file' : 'youtube',
+  yt: null,
+  ytLoading: false,
+  ytReady: false,
+  ytPlaying: false,
+  triedFallback: false,
+  pendingStart: false,
+  stopping: false,
   missing: false,
-  volume: 0.7,
+  volume: 0.7,   // slider value
+  cur: 0,        // actual volume right now (0..1), used for fades
   fadeTimer: null,
   ducked: false,
 
   init() {
-    this.el.addEventListener('error', () => this.markMissing());
-    this.el.addEventListener('play', () => this.render());
-    this.el.addEventListener('pause', () => this.render());
-    this.el.src = MUSIC_SRC;
-    this.el.volume = 0;
+    if (this.mode === 'file') {
+      this.el.addEventListener('error', () => this.useYouTube()); // file missing → fall back to YouTube
+      this.el.addEventListener('play', () => this.render());
+      this.el.addEventListener('pause', () => this.render());
+      this.el.src = MUSIC_SRC;
+      this.el.volume = 0;
+    } else {
+      this.useYouTube();
+    }
     this.render();
   },
 
+  useYouTube() {
+    if (this.yt || this.ytLoading) return;
+    this.mode = 'youtube';
+    this.ytLoading = true;
+    $('#music').classList.add('yt');
+    window.onYouTubeIframeAPIReady = () => {
+      this.yt = new YT.Player('ytPlayer', {
+        width: 200,
+        height: 113,
+        videoId: YT_VIDEO_ID,
+        playerVars: { playsinline: 1, rel: 0 },
+        events: {
+          onReady: () => {
+            this.ytReady = true;
+            this.setVol(0);
+            if (this.pendingStart) this.start();
+            this.render();
+          },
+          onStateChange: (e) => {
+            this.ytPlaying = e.data === YT.PlayerState.PLAYING;
+            if (e.data === YT.PlayerState.ENDED) { this.yt.seekTo(0, true); this.yt.playVideo(); } // loop
+            if (this.ytPlaying) {
+              $('#music').classList.remove('nudge');
+              if (!this.stopping) this.fadeTo(this.target(), 2000);
+            }
+            this.render();
+          },
+          onError: () => {
+            if (!this.triedFallback) {
+              this.triedFallback = true;
+              this.yt.cueVideoById(YT_FALLBACK_ID);
+            } else {
+              this.markMissing();
+            }
+          },
+        },
+      });
+    };
+    const s = document.createElement('script');
+    s.src = 'https://www.youtube.com/iframe_api';
+    s.onerror = () => this.markMissing();
+    document.head.appendChild(s);
+    this.render();
+  },
+
+  target() { return this.ducked ? this.volume * 0.25 : this.volume; },
+
+  isPlaying() { return this.mode === 'file' ? !this.el.paused : this.ytPlaying; },
+
+  setVol(v) {
+    this.cur = Math.min(1, Math.max(0, v));
+    if (this.mode === 'file') this.el.volume = this.cur;
+    else if (this.ytReady) this.yt.setVolume(Math.round(this.cur * 100));
+  },
+
   markMissing() {
-    if (this.missing) return;
     this.missing = true;
     this.render();
   },
 
-  // iOS/Safari only allow audio that was first started by a tap, so "unlock" it on Start
+  // iOS/Safari only allow audio that was first started by a tap, so "unlock" the mp3 on Start
   unlock() {
-    if (this.missing) return;
+    if (this.mode !== 'file') return;
     const a = this.el;
     a.muted = true;
     a.play().then(() => { a.pause(); a.currentTime = 0; a.muted = false; })
       .catch(() => { a.muted = false; });
   },
 
-  async start() {
-    if (this.missing) { toast('🎵 Wala pang song file, pero okay lang. Tuloy lang tayo! 💗'); return; }
-    try {
-      this.el.muted = false;
-      this.el.volume = 0;
-      await this.el.play();
-      this.fadeTo(this.ducked ? this.volume * 0.25 : this.volume, 3000);
-    } catch (e) {
-      if (this.missing) return;
-      // autoplay blocked: gently point at the music button
-      $('#music').classList.add('nudge');
-      toast('Tap the 🎵 button para sa music, love');
+  // Called when the dream begins
+  start() {
+    if (this.missing) { toast('Hindi ma-load yung music ngayon, pero tuloy lang tayo! 💗'); return; }
+    this.stopping = false;
+    if (this.mode === 'youtube') {
+      if (!this.ytReady) { this.pendingStart = true; return; }
+      this.pendingStart = false;
+      this.setVol(0);
+      this.yt.playVideo(); // fade-in happens when it actually starts playing
+      // if the browser blocked autoplay, point at the 🎵 button
+      setTimeout(() => { if (!this.ytPlaying && !this.stopping) this.nudge(); }, 3000);
+      return;
     }
+    this.el.muted = false;
+    this.setVol(0);
+    this.el.play().then(() => this.fadeTo(this.target(), 3000)).catch(() => { if (this.mode === 'file') this.nudge(); });
   },
 
+  nudge() {
+    $('#music').classList.add('nudge');
+    toast('Tap mo yung 🎵 tapos ▶ Play para sa music, love');
+  },
+
+  // From the ▶ button (a real tap, so browsers allow it)
   play() {
-    if (this.missing) return;
     $('#music').classList.remove('nudge');
-    this.el.play().then(() => this.fadeTo(this.volume, 800)).catch(() => {});
+    this.stopping = false;
+    if (this.mode === 'youtube') { if (this.ytReady) this.yt.playVideo(); return; }
+    this.el.play().then(() => this.fadeTo(this.target(), 800)).catch(() => {});
   },
 
-  pause() { this.fadeTo(0, 500, () => this.el.pause()); },
+  rawPause() {
+    if (this.mode === 'file') this.el.pause();
+    else if (this.ytReady) this.yt.pauseVideo();
+  },
+
+  pause() {
+    this.stopping = true;
+    this.fadeTo(0, 500, () => this.rawPause());
+  },
 
   stop() {
-    this.fadeTo(0, 700, () => { this.el.pause(); try { this.el.currentTime = 0; } catch (e) { /* ignore */ } });
+    this.pendingStart = false;
+    this.stopping = true;
+    this.fadeTo(0, 700, () => {
+      this.rawPause();
+      if (this.mode === 'file') { try { this.el.currentTime = 0; } catch (e) { /* ignore */ } }
+      else if (this.ytReady) this.yt.seekTo(0, true);
+    });
   },
 
   duck(on) {
     this.ducked = on;
-    if (!this.el.paused) this.fadeTo(on ? this.volume * 0.25 : this.volume, 500);
+    if (this.isPlaying()) this.fadeTo(this.target(), 500);
   },
 
   fadeTo(target, ms, done) {
     clearInterval(this.fadeTimer);
-    const start = this.el.volume;
+    const start = this.cur;
     const t0 = performance.now();
     this.fadeTimer = setInterval(() => {
       const p = Math.min(1, (performance.now() - t0) / ms);
-      this.el.volume = Math.min(1, Math.max(0, start + (target - start) * p));
+      this.setVol(start + (target - start) * p);
       if (p >= 1) { clearInterval(this.fadeTimer); if (done) done(); }
-    }, 40);
+    }, 50);
   },
 
   render() {
-    const playing = !this.el.paused && !this.missing;
+    const playing = this.isPlaying() && !this.missing;
     $('#music').classList.toggle('playing', playing);
     const btn = $('#musicPlay');
     btn.textContent = playing ? '⏸ Pause' : '▶ Play';
-    btn.disabled = this.missing;
+    const notReady = this.mode === 'youtube' && !this.ytReady;
+    btn.disabled = this.missing || notReady;
     $('#musicVol').disabled = this.missing;
     $('#musicStatus').textContent = this.missing
-      ? 'Wala pang song file 🥺 (add assets/audio/love-song.mp3)'
-      : '🎶 Na Para Bang';
+      ? 'Hindi ma-load yung music ngayon 🥺 (check your internet)'
+      : notReady ? '🎶 Loading Na Para Bang...' : '🎶 Na Para Bang · Mariah Deborah';
   },
 };
 
@@ -722,12 +823,12 @@ $('#musicBtn').addEventListener('click', () => {
   $('#music').classList.remove('nudge');
 });
 $('#musicPlay').addEventListener('click', () => {
-  if (music.el.paused) music.play(); else music.pause();
+  if (music.isPlaying()) music.pause(); else music.play();
 });
 $('#musicVol').addEventListener('input', (e) => {
   music.volume = parseFloat(e.target.value);
   clearInterval(music.fadeTimer);
-  music.el.volume = music.ducked ? music.volume * 0.25 : music.volume;
+  if (music.isPlaying()) music.setVol(music.target());
 });
 // close the music panel when tapping elsewhere
 document.addEventListener('click', (e) => {
